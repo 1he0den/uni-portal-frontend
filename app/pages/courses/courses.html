@@ -1,0 +1,101 @@
+<div class="courses-container">
+  <h2>Courses</h2>
+
+  @if (userRole === 'teacher' || userRole === 'admin') {
+    <div class="create-course-form">
+      <h3>
+        {{ editingCourseId !== null ? 'Редактировать курс' : 'Создать курс' }}
+      </h3>
+
+      <div class="form-group">
+        <label for="name">Название</label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          [(ngModel)]="newCourse.name"
+          placeholder="Введите название курса"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Описание</label>
+        <input
+          id="description"
+          type="text"
+          name="description"
+          [(ngModel)]="newCourse.description"
+          placeholder="Введите описание курса"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="credits">Credits</label>
+        <input
+          id="credits"
+          type="number"
+          name="credits"
+          [(ngModel)]="newCourse.credits"
+        />
+      </div>
+
+      <div class="actions-row">
+        <button type="button" (click)="createOrUpdateCourse()" [disabled]="creating">
+          {{
+            creating
+              ? (editingCourseId !== null ? 'Сохранение...' : 'Создание...')
+              : (editingCourseId !== null ? 'Сохранить изменения' : 'Создать курс')
+          }}
+        </button>
+
+        @if (editingCourseId !== null) {
+          <button type="button" class="secondary-btn" (click)="cancelEdit()">
+            Отмена
+          </button>
+        }
+      </div>
+
+      @if (createErrorMessage) {
+        <p class="error">{{ createErrorMessage }}</p>
+      }
+
+      @if (actionSuccessMessage) {
+        <p class="success">{{ actionSuccessMessage }}</p>
+      }
+    </div>
+
+    <hr />
+  }
+
+  @if (loading) {
+    <p>Загрузка...</p>
+  }
+
+  @if (!loading && errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  @if (!loading && !errorMessage && courses.length === 0) {
+    <div>Курсов пока нет.</div>
+  }
+
+  @if (!loading && courses.length > 0) {
+    @for (course of courses; track course.id) {
+      <div class="course-card">
+        <h3>{{ course.name }}</h3>
+        <p>{{ course.description }}</p>
+        <p><strong>Credits:</strong> {{ course.credits }}</p>
+        <p><strong>Teacher ID:</strong> {{ course.teacher_id }}</p>
+
+        @if (userRole === 'teacher' || userRole === 'admin') {
+          <div class="course-actions">
+            <button type="button" (click)="startEdit(course)">Edit</button>
+            <button type="button" class="delete-btn" (click)="deleteCourse(course.id)">
+              Delete
+            </button>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

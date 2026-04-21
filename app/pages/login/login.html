@@ -1,0 +1,33 @@
+<div class="login-container">
+  <h2>Вход в Uni Portal</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        id="username"
+        type="text"
+        name="username"
+        [(ngModel)]="username"
+        placeholder="Введите username"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="Введите password"
+      />
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Вход...' : 'Войти' }}
+    </button>
+  </form>
+
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>
